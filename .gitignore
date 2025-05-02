@@ -35,9 +35,5 @@ build/
 .vscode/
 
 # Arquivos Spring sensíveis
-application.properties
-application-mysql.yml
-
-### Resources ###
-.src/resources*.yml
-.src/resources*.properties
+src/main/resources/application.properties
+src/main/resources/application-mysql.yml
