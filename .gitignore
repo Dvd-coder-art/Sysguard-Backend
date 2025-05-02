@@ -3,6 +3,7 @@ ROADMAP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
+!**/src/main/resources/*
 !**/src/test/**/target/
 
 ### STS ###
@@ -33,6 +34,10 @@ build/
 ### VS Code ###
 .vscode/
 
+# Arquivos Spring sensíveis
+application.properties
+application-mysql.yml
+
 ### Resources ###
-.src/resources*.iml
+.src/resources*.yml
 .src/resources*.properties
