@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class LocatarioEntity {
     private String endereco;
 
     @Temporal(TemporalType.DATE)
-    private Date dataCobranca;
+    private LocalDate dataCobranca;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal valorAluguel;

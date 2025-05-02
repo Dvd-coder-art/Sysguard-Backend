@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/locatarios")
@@ -36,17 +37,21 @@ public class LocatarioController {
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<LocatarioEntity> listarPorCpf(@PathVariable String cpf) {
-        return service.buscarPorCpf(cpf)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Optional<LocatarioEntity>> listarPorCpf(@PathVariable String cpf) {
+        Optional<LocatarioEntity> locatario = service.buscarPorCpf(cpf);
+        if (locatario.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(locatario);
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<LocatarioEntity> atualizar(@PathVariable String cpf, @RequestBody LocatarioEntity locatario) {
-        if (service.buscarPorCpf(cpf).isPresent()) {
+    public ResponseEntity<Optional<LocatarioResponseDTO>> atualizar(@PathVariable String cpf, @RequestBody LocatarioEntity locatario) {
+        Optional<LocatarioEntity> locatorio = service.buscarPorCpf(cpf);
+        if (locatorio.isPresent()) {
             locatario.setCpf(cpf);
-            return ResponseEntity.ok(service.salvar(locatario));
+            LocatarioEntity locatarioAtualizado = service.salvar(locatario);
+            return ResponseEntity.ok(Optional.of(LocatarioMapper.toDTO(locatarioAtualizado)));
         }
         return ResponseEntity.notFound().build();
     }

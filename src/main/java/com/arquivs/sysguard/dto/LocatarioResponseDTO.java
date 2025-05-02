@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -15,6 +15,6 @@ public class LocatarioResponseDTO {
     private String nome;
     private String cpf;
     private String endereco;
-    private Date dataCobranca;
+    private LocalDate dataCobranca;
     private BigDecimal valorAluguel;
 }

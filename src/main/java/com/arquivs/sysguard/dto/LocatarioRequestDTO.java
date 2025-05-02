@@ -8,7 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Getter
 @Setter
@@ -24,7 +25,7 @@ public class LocatarioRequestDTO {
     private String endereco;
 
     @NotBlank(message = "Data de cobrança é obrigatória")
-    private Date dataCobranca;
+    private LocalDate dataCobranca;
 
     @NotBlank(message = "Valor do aluguel é obrigatório")
     @DecimalMin(value = "0.0", inclusive = false, message = "Valor deve ser maior que 0")
