@@ -6,6 +6,9 @@ import com.arquivs.sysguard.repositoy.LocatarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,5 +44,20 @@ public class LocatarioService {
                 .ifPresent(repository::delete);
     }
 
+    public void registrarPagamento(String cpf) {
+        LocatarioEntity locatario = repository.findAll().stream()
+                .filter(l -> l.getCpf().equals(cpf))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Locatário não encontrado"));
+
+        locatario.setPago(true);
+        locatario.setValorMulta(null);
+
+
+        LocalDate novaData = locatario.getDataCobranca().plusMonths(1);
+        locatario.setDataCobranca(novaData);
+
+        repository.save(locatario);
+    }
 
 }

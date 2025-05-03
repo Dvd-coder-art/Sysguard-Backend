@@ -56,6 +56,12 @@ public class LocatarioController {
         return ResponseEntity.notFound().build();
     }
 
+    @PatchMapping("/{id}/pagar")
+    public ResponseEntity<Void> registrarPagamento(@PathVariable String cpf) {
+        service.registrarPagamento(cpf);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{cpf}")
     public ResponseEntity<Void> deletar(@PathVariable String cpf) {
         if (service.buscarPorCpf(cpf).isPresent()) {
