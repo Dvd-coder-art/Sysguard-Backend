@@ -2,8 +2,11 @@ package com.arquivs.sysguard.scheduler;
 
 import com.arquivs.sysguard.entity.LocatarioEntity;
 import com.arquivs.sysguard.repositoy.LocatarioRepository;
+import com.arquivs.sysguard.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,15 +21,19 @@ import java.util.List;
 public class CobrancaScheduler {
 
     private final LocatarioRepository locatarioRepository;
+    private EmailService emailService;
 
-    private static final BigDecimal MULTA = new BigDecimal("30.0");
-    private static final BigDecimal JUROS_DIARIO_FIXO = new BigDecimal("10.00");
+    @Value("${app.cobranca.multa}")
+    private BigDecimal MULTA;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Value("${app.cobranca.juros-diario}")
+    private BigDecimal JUROS_DIARIO_FIXO;
+
+    @Scheduled(cron = "0 0 1 * * *")
     public void verificarCobrancasDias() {
         LocalDate hoje = LocalDate.now();
 
-        List<LocatarioEntity> lista = locatarioRepository.findAll();
+        List<LocatarioEntity> lista = locatarioRepository.findByPagoFalse();
 
         for (LocatarioEntity loc : lista) {
             LocalDate vencimento = loc.getDataCobranca();
@@ -44,9 +51,18 @@ public class CobrancaScheduler {
 
                 log.warn("Locatário em atraso: {} | Dias em atraso: {} | Valor atualizado com multa/juros: {}",
                         loc.getNome(), diasAtraso, valorAtualizado);
+
+                emailService.enviarEmail(
+                        loc.getEmailDestinatario(),
+                        "Alerta de Atraso no Pagamento",
+                        String.format("Prezado(a) %s,\n\nSeu pagamento está atrasado há %d dias. O valor atualizado com multa e juros é: R$ %.2f.\n\nAtenciosamente,\nEquipe SysGuard",
+                                loc.getNome(), diasAtraso, valorAtualizado)
+                );
+
             } else {
                 log.info("Locatário em dia ou pago: {}", loc.getNome());
             }
         }
+
     }
 }

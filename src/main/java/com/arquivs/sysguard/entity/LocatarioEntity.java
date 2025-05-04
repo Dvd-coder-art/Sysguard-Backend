@@ -31,6 +31,8 @@ public class LocatarioEntity {
     @Column(precision = 10, scale = 2)
     private BigDecimal valorAluguel;
 
+    private String emailDestinatario;
+
     private Boolean pago = false;
 
     private BigDecimal valorMulta;
