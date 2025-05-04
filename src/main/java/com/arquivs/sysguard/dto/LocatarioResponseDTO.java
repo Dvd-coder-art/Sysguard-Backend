@@ -17,4 +17,5 @@ public class LocatarioResponseDTO {
     private String endereco;
     private LocalDate dataCobranca;
     private BigDecimal valorAluguel;
+    private String emailDestinatario;
 }
