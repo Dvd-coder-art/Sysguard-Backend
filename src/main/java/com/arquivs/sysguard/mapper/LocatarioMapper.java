@@ -17,6 +17,7 @@ public class LocatarioMapper {
         entity.setEndereco(dto.getEndereco());
         entity.setDataCobranca(dto.getDataCobranca());
         entity.setValorAluguel(dto.getValorAluguel());
+        entity.setEmailDestinatario(dto.getEmailDestinatario());
         return entity;
     }
 
@@ -26,7 +27,8 @@ public class LocatarioMapper {
                 entity.getCpf(),
                 entity.getEndereco(),
                 entity.getDataCobranca(),
-                entity.getValorAluguel()
+                entity.getValorAluguel(),
+                entity.getEmailDestinatario()
         );
     }
 }

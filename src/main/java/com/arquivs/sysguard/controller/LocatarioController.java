@@ -5,6 +5,7 @@ import com.arquivs.sysguard.dto.LocatarioRequestDTO;
 import com.arquivs.sysguard.dto.LocatarioResponseDTO;
 import com.arquivs.sysguard.entity.LocatarioEntity;
 import com.arquivs.sysguard.mapper.LocatarioMapper;
+import com.arquivs.sysguard.repositoy.LocatarioRepository;
 import com.arquivs.sysguard.service.LocatarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class LocatarioController {
 
     @Autowired
     private LocatarioService service;
+
+    @Autowired
+    private LocatarioRepository locatarioRepository;
 
     @PostMapping
     public ResponseEntity<LocatarioResponseDTO> salvar(@RequestBody LocatarioRequestDTO locatario) {
@@ -56,10 +60,30 @@ public class LocatarioController {
         return ResponseEntity.notFound().build();
     }
 
-    @PatchMapping("/{id}/pagar")
-    public ResponseEntity<Void> registrarPagamento(@PathVariable String cpf) {
-        service.registrarPagamento(cpf);
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/{cpf}/pagamento")
+    public ResponseEntity<String> registrarPagamento(
+            @PathVariable String cpf,
+            @RequestBody(required = false) LocatarioRequestDTO request) {
+
+        Optional<LocatarioEntity> optional = locatarioRepository.findByCpf(cpf);
+        if (optional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        LocatarioEntity loc = optional.get();
+        loc.setStatus(true);
+
+        if (request != null) {
+            if (request.getValorAluguel() != null) {
+                loc.setValorAluguel(request.getValorAluguel());
+            }
+            if (request.getNovaDataCobranca() != null) {
+                loc.setDataCobranca(request.getNovaDataCobranca());
+            }
+        }
+
+        locatarioRepository.save(loc);
+        return ResponseEntity.ok("Pagamento registrado com sucesso.");
     }
 
     @DeleteMapping("/{cpf}")
