@@ -33,7 +33,7 @@ public class LocatarioEntity {
 
     private String emailDestinatario;
 
-    private Boolean status = false;
+    private Boolean status;
 
     private BigDecimal valorMulta;
 

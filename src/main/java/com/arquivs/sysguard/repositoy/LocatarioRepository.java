@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface LocatarioRepository extends JpaRepository<LocatarioEntity, Long> {
-    List<LocatarioEntity> findByStatus();
+    List<LocatarioEntity> findByStatus(Boolean status);
 
     Optional<LocatarioEntity> findByCpf(String cpf);
 }

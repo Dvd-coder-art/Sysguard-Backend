@@ -33,7 +33,7 @@ public class CobrancaScheduler {
     public void verificarCobrancasDias() {
         LocalDate hoje = LocalDate.now();
 
-        List<LocatarioEntity> lista = locatarioRepository.findByStatus();
+        List<LocatarioEntity> lista = locatarioRepository.findByStatus(false);
 
         for (LocatarioEntity loc : lista) {
             LocalDate vencimento = loc.getDataCobranca();
