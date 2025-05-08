@@ -2,7 +2,7 @@ package com.arquivs.sysguard.service;
 
 
 import com.arquivs.sysguard.entity.LocatarioEntity;
-import com.arquivs.sysguard.repositoy.LocatarioRepository;
+import com.arquivs.sysguard.repository.LocatarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

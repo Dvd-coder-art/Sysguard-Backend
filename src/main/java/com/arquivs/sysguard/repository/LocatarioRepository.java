@@ -1,4 +1,4 @@
-package com.arquivs.sysguard.repositoy;
+package com.arquivs.sysguard.repository;
 
 import com.arquivs.sysguard.entity.LocatarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

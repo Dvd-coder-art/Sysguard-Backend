@@ -5,7 +5,7 @@ import com.arquivs.sysguard.dto.LocatarioRequestDTO;
 import com.arquivs.sysguard.dto.LocatarioResponseDTO;
 import com.arquivs.sysguard.entity.LocatarioEntity;
 import com.arquivs.sysguard.mapper.LocatarioMapper;
-import com.arquivs.sysguard.repositoy.LocatarioRepository;
+import com.arquivs.sysguard.repository.LocatarioRepository;
 import com.arquivs.sysguard.service.LocatarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

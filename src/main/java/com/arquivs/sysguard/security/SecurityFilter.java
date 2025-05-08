@@ -1,7 +1,7 @@
 package com.arquivs.sysguard.security;
 
 
-import com.arquivs.sysguard.repositoy.UsuarioRepository;
+import com.arquivs.sysguard.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

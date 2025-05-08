@@ -1,6 +1,6 @@
 package com.arquivs.sysguard.service;
 
-import com.arquivs.sysguard.repositoy.UsuarioRepository;
+import com.arquivs.sysguard.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
