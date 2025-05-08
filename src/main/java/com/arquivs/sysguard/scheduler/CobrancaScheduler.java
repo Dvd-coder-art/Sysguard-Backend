@@ -38,7 +38,7 @@ public class CobrancaScheduler {
         for (LocatarioEntity loc : lista) {
             LocalDate vencimento = loc.getDataCobranca();
 
-            if (!Boolean.TRUE.equals(loc.getPago()) && vencimento.isBefore(hoje)) {
+            if (!Boolean.TRUE.equals(loc.getStatus()) && vencimento.isBefore(hoje)) {
                 long diasAtraso = ChronoUnit.DAYS.between(vencimento, hoje);
                 BigDecimal valorOriginal = loc.getValorAluguel();
 
