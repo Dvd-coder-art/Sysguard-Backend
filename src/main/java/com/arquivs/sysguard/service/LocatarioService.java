@@ -48,7 +48,7 @@ public class LocatarioService {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Locatário não encontrado"));
 
-        locatario.setPago(true);
+        locatario.setStatus(true);
         locatario.setValorMulta(null);
 
 
