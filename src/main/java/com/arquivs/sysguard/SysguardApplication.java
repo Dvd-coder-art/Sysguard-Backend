@@ -8,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
+@EntityScan(basePackages = "com.arquivs.sysguard.entity")
 @EnableJpaRepositories(basePackages = "com.arquivs.sysguard.repository")
-@EntityScan(basePackages = "com.arquivs.sysguard.model")
 public class SysguardApplication {
 
 	public static void main(String[] args) {
