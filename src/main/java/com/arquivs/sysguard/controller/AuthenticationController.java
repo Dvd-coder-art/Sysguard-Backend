@@ -5,7 +5,7 @@ import com.arquivs.sysguard.dto.LoginResponseDTO;
 import com.arquivs.sysguard.dto.infra.AuthenticationDTO;
 import com.arquivs.sysguard.dto.infra.RegisterDTO;
 import com.arquivs.sysguard.entity.UserEntity;
-import com.arquivs.sysguard.repository.UsuarioRepository;
+import com.arquivs.sysguard.repository.UserRepository;
 import com.arquivs.sysguard.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UsuarioRepository repository;
+    private UserRepository repository;
 
     @Autowired
     private TokenService tokenService;

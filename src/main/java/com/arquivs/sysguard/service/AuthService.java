@@ -1,6 +1,6 @@
 package com.arquivs.sysguard.service;
 
-import com.arquivs.sysguard.repository.UsuarioRepository;
+import com.arquivs.sysguard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class AuthService implements UserDetailsService {
 
     @Autowired
-    UsuarioRepository repository;
+    UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

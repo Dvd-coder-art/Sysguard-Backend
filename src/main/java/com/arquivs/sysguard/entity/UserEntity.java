@@ -33,6 +33,10 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private Role role;
 
+
+    @OneToMany(mappedBy = "user")  // Relacionamento reverso
+    private List<EmpresaEntity> empresa;
+
     public UserEntity(String login, String password, Role role) {
         this.login = login;
         this.password = password;

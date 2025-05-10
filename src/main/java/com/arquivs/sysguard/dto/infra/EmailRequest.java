@@ -1,4 +1,4 @@
-package com.arquivs.sysguard.dto;
+package com.arquivs.sysguard.dto.infra;
 
 import lombok.Getter;
 import lombok.Setter;

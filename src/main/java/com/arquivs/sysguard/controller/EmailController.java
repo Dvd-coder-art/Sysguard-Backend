@@ -1,7 +1,7 @@
 package com.arquivs.sysguard.controller;
 
 
-import com.arquivs.sysguard.dto.EmailRequest;
+import com.arquivs.sysguard.dto.infra.EmailRequest;
 import com.arquivs.sysguard.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
