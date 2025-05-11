@@ -1,4 +1,3 @@
-// EmpresaMapper.java
 package com.arquivs.sysguard.mapper;
 
 import com.arquivs.sysguard.dto.EmpresaDTO;
@@ -9,8 +8,9 @@ public class EmpresaMapper {
         if (entity == null) return null;
 
         EmpresaDTO dto = new EmpresaDTO();
-        entity.setId(entity.getId());
-        entity.setNome(entity.getNome());
+        dto.setId(entity.getId());
+        dto.setNome(entity.getNome());
+        // Adicione outros campos se necessário
 
         return dto;
     }
@@ -20,6 +20,7 @@ public class EmpresaMapper {
         EmpresaEntity entity = new EmpresaEntity();
         entity.setId(dto.getId());
         entity.setNome(dto.getNome());
+        // Adicione outros campos se necessário
 
         return entity;
     }

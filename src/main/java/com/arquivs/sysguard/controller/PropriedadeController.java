@@ -1,6 +1,9 @@
 package com.arquivs.sysguard.controller;
 
+import com.arquivs.sysguard.dto.EmpresaDTO;
 import com.arquivs.sysguard.dto.PropriedadeDTO;
+import com.arquivs.sysguard.mapper.EmpresaMapper;
+import com.arquivs.sysguard.mapper.PropriedadeMapper;
 import com.arquivs.sysguard.response.ApiResponse;
 import com.arquivs.sysguard.service.EmpresaService;
 import com.arquivs.sysguard.service.PropriedadeService;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/propriedades")
@@ -26,9 +30,23 @@ public class PropriedadeController {
     @PostMapping
     public ResponseEntity<ApiResponse<PropriedadeDTO>> cadastrar(@RequestBody PropriedadeDTO propriedadeDTO) {
         Long userId = getUserId();
-        Long empresaId = empresaService.obterEmpresaDoUsuario(userId).getId();
-        propriedadeDTO.setEmpresaId(empresaId);
+        Optional<Long> empresaIdOpt = empresaService.obterEmpresaDoUsuario(userId)
+                .stream()
+                .findFirst()
+                .map(EmpresaMapper::toDTO)
+                .map(EmpresaDTO::getId);
 
+
+        if (empresaIdOpt.isEmpty()) {
+            ApiResponse<PropriedadeDTO> response = new ApiResponse<>(
+                    "error",
+                    "Usuário não possui empresa cadastrada",
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        propriedadeDTO.setEmpresaId(empresaIdOpt.get());
         PropriedadeDTO novaPropriedade = propriedadeService.cadastrarPropriedade(propriedadeDTO);
 
         ApiResponse<PropriedadeDTO> response = new ApiResponse<>(
@@ -39,11 +57,39 @@ public class PropriedadeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> atualizar(@PathVariable Long id, @RequestBody PropriedadeDTO propriedadeAtualizada) {
+        List<PropriedadeDTO> propriedades = propriedadeService.listarPropriedadesDoUsuario(getUserId());
+        Optional<PropriedadeDTO> propriedadeExistente = propriedades.stream()
+                .filter(propriedade -> propriedade.getId().equals(id))
+                .findFirst();
+        if (propriedadeExistente.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                    "error",
+                    "Propriedade não encontrada",
+                    null
+            ));
+        }
+
+        PropriedadeDTO propriedadeAtualizadaDTO = propriedadeService.atualizarPropriedade(id, propriedadeAtualizada);
+        propriedadeAtualizadaDTO.setId(null);
+
+        Optional<PropriedadeDTO> resposta = Optional.of(propriedadeAtualizadaDTO);
+
+        ApiResponse<Optional<PropriedadeDTO>> response = new ApiResponse<>(
+                "success",
+                "Propriedade atualizada com sucesso",
+                resposta
+        );
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<PropriedadeDTO>>> listar() {
+    public ResponseEntity<ApiResponse<List<PropriedadeDTO>>> listar(){
         Long userId = getUserId();
         List<PropriedadeDTO> propriedades = propriedadeService.listarPropriedadesDoUsuario(userId);
+
         ApiResponse<List<PropriedadeDTO>> response = new ApiResponse<>(
                 "success",
                 "Propriedades listadas com sucesso",
@@ -51,6 +97,49 @@ public class PropriedadeController {
         );
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> buscarPorId(@PathVariable Long id) {
+        Optional<PropriedadeDTO> propriedade = propriedadeService.buscarPropriedadePorId(id);
+
+        if (propriedade.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                    "error",
+                    "Propriedade não encontrada",
+                    null
+            ));
+        }
+
+        ApiResponse<Optional<PropriedadeDTO>> response = new ApiResponse<>(
+                "success",
+                "Propriedade encontrada com sucesso",
+                propriedade
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable Long id) {
+        Optional<PropriedadeDTO> propriedades = propriedadeService.buscarPropriedadePorId(id);
+
+       if(propriedades.isEmpty()){
+           ApiResponse<Void> response = new ApiResponse<>(
+                     "error",
+                     "Propriedade não encontrada",
+                     null
+           );
+           return ResponseEntity.badRequest().body(response);
+       }
+       ApiResponse<Void> response = new ApiResponse<>(
+               "success",
+               "Propriedade deletada com sucesso",
+               null
+         );
+
+        propriedadeService.deletarPropriedade(id);
+        return ResponseEntity.ok(response);
+    }
+
 
     private Long getUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

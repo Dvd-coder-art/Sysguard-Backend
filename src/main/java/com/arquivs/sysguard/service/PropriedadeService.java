@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PropriedadeService {
@@ -23,11 +24,14 @@ public class PropriedadeService {
     private EmpresaRepository empresaRepo;
 
     public PropriedadeDTO cadastrarPropriedade(PropriedadeDTO dto) {
+        List<EmpresaEntity> empresas = empresaRepo.findByUserId(dto.getEmpresaId());
+
+        Optional<EmpresaEntity> empresaOpt = empresas.stream()
+                .filter(empresa -> empresa.getId().equals(dto.getEmpresaId()))
+                .findFirst();
 
         EmpresaEntity empresa = empresaRepo.findById(dto.getEmpresaId())
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
-
-
+                .orElseThrow(() -> new RuntimeException("Empresa não encontrada para o ID: " + dto.getEmpresaId()));
 
         PropriedadeEntity propriedade = PropriedadeMapper.toEntity(dto);
         propriedade.setEmpresa(empresa);
@@ -38,12 +42,44 @@ public class PropriedadeService {
         return PropriedadeMapper.toDTO(novaPropriedade);
     }
 
-    public List<PropriedadeDTO> listarPropriedadesDoUsuario(Long userId) {
-        EmpresaEntity empresa = empresaService.obterEmpresaDoUsuario(userId);
-        List<PropriedadeEntity> propriedades = propriedadeRepo.findAllByEmpresaId(empresa.getId());
+    public List<PropriedadeDTO> listarPropriedadesDoUsuario(Long userId){
+        List<EmpresaEntity> empresas = empresaService.obterEmpresaDoUsuario(userId);
 
-        return propriedades.stream()
+        return empresas.stream()
+                .flatMap(empresa -> propriedadeRepo.findAllByEmpresaId(empresa.getId()).stream())
                 .map(PropriedadeMapper::toDTO)
                 .toList();
+    }
+
+    public Optional<PropriedadeDTO> buscarPropriedadePorId(Long id) {
+        return propriedadeRepo.findById(id)
+                .map(PropriedadeMapper::toDTO);
+    }
+
+
+    public PropriedadeDTO atualizarPropriedade(Long id, PropriedadeDTO dto) {
+        Optional<PropriedadeEntity> propriedadeOpt = propriedadeRepo.findById(id);
+
+        if (propriedadeOpt.isPresent()) {
+            PropriedadeEntity propriedade = propriedadeOpt.get();
+            propriedade.setNome(dto.getNome());
+            propriedade.setEndereco(dto.getEndereco());
+            propriedade.setValorAluguel(dto.getValorAluguel());
+            propriedade.setDataVencimento(dto.getDataVencimento());
+
+            PropriedadeEntity propriedadeAtualizada = propriedadeRepo.save(propriedade);
+            return PropriedadeMapper.toDTO(propriedadeAtualizada);
+        } else {
+            return null;
+        }
+    }
+
+    public Void deletarPropriedade(Long id){
+        Optional<PropriedadeEntity> propriedades = propriedadeRepo.findById(id);
+
+        PropriedadeEntity propriedade = propriedades.get();
+
+        propriedadeRepo.delete(propriedade);
+        return null;
     }
 }

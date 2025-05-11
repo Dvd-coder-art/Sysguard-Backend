@@ -5,6 +5,7 @@ import com.arquivs.sysguard.dto.PropriedadeDTO;
 import com.arquivs.sysguard.entity.EmpresaEntity;
 import com.arquivs.sysguard.entity.PropriedadeEntity;
 
+
 public class PropriedadeMapper {
     public static PropriedadeDTO toDTO(PropriedadeEntity entity) {
         if (entity == null) {
@@ -14,6 +15,9 @@ public class PropriedadeMapper {
         PropriedadeDTO dto = new PropriedadeDTO();
         dto.setId(entity.getId());
         dto.setNome(entity.getNome());
+        dto.setEndereco(entity.getEndereco());
+        dto.setValorAluguel(entity.getValorAluguel());
+        dto.setDataVencimento(entity.getDataVencimento());
         dto.setEmpresaNome(entity.getEmpresa().getNome());
         dto.setEmpresaId(entity.getEmpresa().getId());
 
@@ -28,6 +32,9 @@ public class PropriedadeMapper {
         PropriedadeEntity entity = new PropriedadeEntity();
         entity.setId(dto.getId());
         entity.setNome(dto.getNome());
+        entity.setEndereco(dto.getEndereco());
+        entity.setValorAluguel(dto.getValorAluguel());
+        entity.setDataVencimento(dto.getDataVencimento());
         EmpresaEntity empresa = new EmpresaEntity();
         empresa.setId(dto.getEmpresaId());
         entity.setEmpresa(empresa);

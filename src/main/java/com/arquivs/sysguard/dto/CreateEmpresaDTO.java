@@ -1,4 +1,4 @@
 package com.arquivs.sysguard.dto;
 
-public record CreateEmpresaDTO(String nome) {
+public record CreateEmpresaDTO(Long id,String nome) {
 }

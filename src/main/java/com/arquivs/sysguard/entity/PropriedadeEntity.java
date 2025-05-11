@@ -1,10 +1,14 @@
 package com.arquivs.sysguard.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,6 +22,13 @@ public class PropriedadeEntity {
     private Long id;
 
     private String nome;
+
+    private String endereco;
+
+    private BigDecimal valorAluguel;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dataVencimento;
 
     @ManyToOne
     @JoinColumn(name = "empresa_id", nullable = false)
