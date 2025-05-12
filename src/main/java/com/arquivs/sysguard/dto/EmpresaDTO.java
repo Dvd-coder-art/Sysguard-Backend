@@ -8,10 +8,12 @@ import lombok.Setter;
 public class EmpresaDTO {
     private Long id;
     private String nome;
+    private String userIdCriptografado;
 
     public EmpresaDTO() {
         this.id = id;
         this.nome = nome;
+        this.userIdCriptografado = userIdCriptografado;
     }
 }
 
