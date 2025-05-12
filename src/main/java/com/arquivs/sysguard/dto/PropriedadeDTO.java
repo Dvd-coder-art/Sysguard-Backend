@@ -11,12 +11,12 @@ import java.time.LocalDate;
 @Setter
 public class PropriedadeDTO {
 
-    private Long id;
+    private String id;
     private String nome;
     private String endereco;
     private BigDecimal valorAluguel;
     private LocalDate dataVencimento;
-    private Long empresaId;
+    private String empresaId;
     private String empresaNome;
 
     public PropriedadeDTO() {

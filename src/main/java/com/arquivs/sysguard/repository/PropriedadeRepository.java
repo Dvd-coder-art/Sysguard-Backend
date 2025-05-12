@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PropriedadeRepository extends JpaRepository<PropriedadeEntity, Long> {
-    List<PropriedadeEntity> findAllByEmpresaId(Long empresaId);
+public interface PropriedadeRepository extends JpaRepository<PropriedadeEntity, String> {
+    List<PropriedadeEntity> findAllByEmpresaId(String empresaId);
 }

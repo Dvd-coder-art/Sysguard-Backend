@@ -20,7 +20,7 @@ public class EmpresaService {
     @Autowired
     private UserRepository userRepo;
 
-    public EmpresaDTO salvarEmpresa(EmpresaEntity empresa, Long userId) {
+    public EmpresaDTO salvarEmpresa(EmpresaEntity empresa, String userId) {
         UserEntity user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado para o ID: " + userId));
         empresa.setUser(user);
@@ -29,16 +29,17 @@ public class EmpresaService {
 
 
 
-    public Optional<EmpresaEntity> obterEmpresaPorId(Long empresaId) {
+    public Optional<EmpresaEntity> obterEmpresaPorId(String empresaId) {
         return empresaRepo.findById(empresaId);
     }
 
 
-    public List<EmpresaEntity> obterEmpresaDoUsuario(Long userId) {
+    public List<EmpresaEntity> obterEmpresaDoUsuario(String userId) {
         return empresaRepo.findByUserId(userId);
     }
 
-    public void deletarEmpresa(Long empresaId) {
+    public void deletarEmpresa(String empresaId) {
+
         empresaRepo.deleteById(empresaId);
     }
 }

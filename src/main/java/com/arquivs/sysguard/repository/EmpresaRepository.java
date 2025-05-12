@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface EmpresaRepository extends JpaRepository<EmpresaEntity, Long> {
-    List<EmpresaEntity> findByUserId(Long userId);
+public interface EmpresaRepository extends JpaRepository<EmpresaEntity, String> {
+    List<EmpresaEntity> findByUserId(String userId);
 
 }

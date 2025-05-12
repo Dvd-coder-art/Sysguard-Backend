@@ -19,8 +19,7 @@ import java.util.List;
 public class EmpresaEntity extends EmpresaDTO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String nome;
 

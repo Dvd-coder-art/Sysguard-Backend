@@ -42,7 +42,7 @@ public class PropriedadeService {
         return PropriedadeMapper.toDTO(novaPropriedade);
     }
 
-    public List<PropriedadeDTO> listarPropriedadesDoUsuario(Long userId){
+    public List<PropriedadeDTO> listarPropriedadesDoUsuario(String userId){
         List<EmpresaEntity> empresas = empresaService.obterEmpresaDoUsuario(userId);
 
         return empresas.stream()
@@ -51,13 +51,13 @@ public class PropriedadeService {
                 .toList();
     }
 
-    public Optional<PropriedadeDTO> buscarPropriedadePorId(Long id) {
+    public Optional<PropriedadeDTO> buscarPropriedadePorId(String id) {
         return propriedadeRepo.findById(id)
                 .map(PropriedadeMapper::toDTO);
     }
 
 
-    public PropriedadeDTO atualizarPropriedade(Long id, PropriedadeDTO dto) {
+    public PropriedadeDTO atualizarPropriedade(String id, PropriedadeDTO dto) {
         Optional<PropriedadeEntity> propriedadeOpt = propriedadeRepo.findById(id);
 
         if (propriedadeOpt.isPresent()) {
@@ -74,7 +74,7 @@ public class PropriedadeService {
         }
     }
 
-    public Void deletarPropriedade(Long id){
+    public Void deletarPropriedade(String id){
         Optional<PropriedadeEntity> propriedades = propriedadeRepo.findById(id);
 
         PropriedadeEntity propriedade = propriedades.get();

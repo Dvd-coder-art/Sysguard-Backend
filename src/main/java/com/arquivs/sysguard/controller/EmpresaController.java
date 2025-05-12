@@ -24,7 +24,7 @@ public class EmpresaController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<EmpresaDTO>> criarEmpresa(@RequestBody EmpresaDTO dto) {
-        Long userId = getUserId();
+        String userId = getUserId();
         try {
             EmpresaEntity entity = EmpresaMapper.toEntity(dto);
             EmpresaEntity empresaSalva = (EmpresaEntity) empresaService.salvarEmpresa(entity, userId);
@@ -47,7 +47,7 @@ public class EmpresaController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<EmpresaDTO>>> obterEmpresaDoUsuario() {
-        Long userId = getUserId();
+        String userId = getUserId();
         List<EmpresaDTO> empresas = empresaService.obterEmpresaDoUsuario(userId)
                 .stream()
                 .map(EmpresaMapper::toDTO)
@@ -67,7 +67,7 @@ public class EmpresaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<EmpresaDTO>> buscarPorId(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<EmpresaDTO>> buscarPorId(@PathVariable String id){
         return empresaService.obterEmpresaPorId(id).map(empresa ->{
             EmpresaDTO empresaDTO = EmpresaMapper.toDTO(empresa);
             ApiResponse<EmpresaDTO> response = new ApiResponse<>(
@@ -80,7 +80,7 @@ public class EmpresaController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<EmpresaDTO>> atualizar(@PathVariable Long id, @RequestBody EmpresaDTO dto){
+    public ResponseEntity<ApiResponse<EmpresaDTO>> atualizar(@PathVariable String id, @RequestBody EmpresaDTO dto){
         Optional<EmpresaEntity> existente = empresaService.obterEmpresaPorId(id);
 
         if(existente.isEmpty()){
@@ -110,7 +110,7 @@ public class EmpresaController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable String id){
         try {
             empresaService.deletarEmpresa(id);
             ApiResponse<Void> response = new ApiResponse<>(
@@ -123,7 +123,7 @@ public class EmpresaController {
         }
     }
 
-    private Long getUserId() {
+    private String getUserId() {
         UserEntity user = (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return user.getId();
     }

@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EmpresaDTO {
-    private Long id;
+    private String id;
     private String nome;
     private String userIdCriptografado;
 

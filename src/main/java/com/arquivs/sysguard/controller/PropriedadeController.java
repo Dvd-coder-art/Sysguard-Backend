@@ -29,8 +29,8 @@ public class PropriedadeController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<PropriedadeDTO>> cadastrar(@RequestBody PropriedadeDTO propriedadeDTO) {
-        Long userId = getUserId();
-        Optional<Long> empresaIdOpt = empresaService.obterEmpresaDoUsuario(userId)
+        String userId = getUserId();
+        Optional<String> empresaIdOpt = empresaService.obterEmpresaDoUsuario(userId)
                 .stream()
                 .findFirst()
                 .map(EmpresaMapper::toDTO)
@@ -58,7 +58,7 @@ public class PropriedadeController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> atualizar(@PathVariable Long id, @RequestBody PropriedadeDTO propriedadeAtualizada) {
+    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> atualizar(@PathVariable String id, @RequestBody PropriedadeDTO propriedadeAtualizada) {
         List<PropriedadeDTO> propriedades = propriedadeService.listarPropriedadesDoUsuario(getUserId());
         Optional<PropriedadeDTO> propriedadeExistente = propriedades.stream()
                 .filter(propriedade -> propriedade.getId().equals(id))
@@ -87,7 +87,7 @@ public class PropriedadeController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<PropriedadeDTO>>> listar(){
-        Long userId = getUserId();
+        String userId = getUserId();
         List<PropriedadeDTO> propriedades = propriedadeService.listarPropriedadesDoUsuario(userId);
 
         ApiResponse<List<PropriedadeDTO>> response = new ApiResponse<>(
@@ -99,7 +99,7 @@ public class PropriedadeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> buscarPorId(@PathVariable String id) {
         Optional<PropriedadeDTO> propriedade = propriedadeService.buscarPropriedadePorId(id);
 
         if (propriedade.isEmpty()) {
@@ -119,7 +119,7 @@ public class PropriedadeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable String id) {
         Optional<PropriedadeDTO> propriedades = propriedadeService.buscarPropriedadePorId(id);
 
        if(propriedades.isEmpty()){
@@ -141,7 +141,7 @@ public class PropriedadeController {
     }
 
 
-    private Long getUserId() {
+    private String getUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof com.arquivs.sysguard.entity.UserEntity user) {
             return user.getId();

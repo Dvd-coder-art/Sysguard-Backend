@@ -1,13 +1,20 @@
 package com.arquivs.sysguard.security;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 public class AesIdEncoder {
 
-    private static final String SECRET = "${aes.secret}";
+    private static String SECRET;
     private static final String ALGORITHM = "AES";
+
+    @Value("${aes.secret}")
+    public void setSecret(String secret){
+        SECRET = secret;
+    }
 
     public static String encode(String data) {
         try {
