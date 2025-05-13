@@ -27,13 +27,32 @@ public class PropriedadeController {
     @Autowired
     private EmpresaService empresaService;
 
+    @Autowired
+    private EmpresaMapper empresaMapper;
+
     @PostMapping
     public ResponseEntity<ApiResponse<PropriedadeDTO>> cadastrar(@RequestBody PropriedadeDTO propriedadeDTO) {
         String userId = getUserId();
+
+        List<PropriedadeDTO> propriedades = propriedadeService.listarPropriedadesDoUsuario(userId);
+        Optional<PropriedadeDTO> propriedadeExistente = propriedades.stream()
+                .filter(propriedade -> propriedade.getNome().equals(propriedadeDTO.getNome()))
+                .findFirst();
+        if (propriedadeExistente.isPresent()) {
+            String propriedadeString = propriedadeExistente.get().getNome();
+            ApiResponse<PropriedadeDTO> response = new ApiResponse<>(
+                    "error",
+                    "Propriedade com nome " + propriedadeString + " já cadastrada",
+                    null
+            );
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
         Optional<String> empresaIdOpt = empresaService.obterEmpresaDoUsuario(userId)
                 .stream()
                 .findFirst()
-                .map(EmpresaMapper::toDTO)
+                .map(empresaMapper::toDTO)
                 .map(EmpresaDTO::getId);
 
 

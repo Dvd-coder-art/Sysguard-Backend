@@ -22,13 +22,16 @@ public class EmpresaController {
     @Autowired
     private EmpresaService empresaService;
 
+    @Autowired
+    private EmpresaMapper empresaMapper;
+
     @PostMapping
     public ResponseEntity<ApiResponse<EmpresaDTO>> criarEmpresa(@RequestBody EmpresaDTO dto) {
         String userId = getUserId();
         try {
-            EmpresaEntity entity = EmpresaMapper.toEntity(dto);
+            EmpresaEntity entity = empresaMapper.toEntity(dto);
             EmpresaEntity empresaSalva = (EmpresaEntity) empresaService.salvarEmpresa(entity, userId);
-            EmpresaDTO empresaCriada = EmpresaMapper.toDTO(empresaSalva);
+            EmpresaDTO empresaCriada = empresaMapper.toDTO(empresaSalva);
             ApiResponse<EmpresaDTO> response = new ApiResponse<>(
                     "success",
                     "Empresa criada com sucesso",
@@ -50,7 +53,7 @@ public class EmpresaController {
         String userId = getUserId();
         List<EmpresaDTO> empresas = empresaService.obterEmpresaDoUsuario(userId)
                 .stream()
-                .map(EmpresaMapper::toDTO)
+                .map(empresaMapper::toDTO)
                 .toList();
 
         if (empresas == null || empresas.isEmpty()) {
@@ -69,7 +72,7 @@ public class EmpresaController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<EmpresaDTO>> buscarPorId(@PathVariable String id){
         return empresaService.obterEmpresaPorId(id).map(empresa ->{
-            EmpresaDTO empresaDTO = EmpresaMapper.toDTO(empresa);
+            EmpresaDTO empresaDTO = empresaMapper.toDTO(empresa);
             ApiResponse<EmpresaDTO> response = new ApiResponse<>(
                     "success",
                     "Empresa encontrada com sucesso",
@@ -97,7 +100,7 @@ public class EmpresaController {
 
 
         EmpresaEntity salvo = (EmpresaEntity) empresaService.salvarEmpresa(atualizada, atualizada.getUser().getId());
-        EmpresaDTO salvoDTO = EmpresaMapper.toDTO(salvo);
+        EmpresaDTO salvoDTO = empresaMapper.toDTO(salvo);
 
         ApiResponse<EmpresaDTO> response = new ApiResponse<>(
                 "success",
