@@ -16,7 +16,11 @@ public class PropriedadeMapper {
         dto.setId(entity.getId());
         dto.setNome(entity.getNome());
         dto.setEndereco(entity.getEndereco());
+        dto.setGmail(entity.getGmail());
+        dto.setValorJuros(entity.getValorJuros());
+        dto.setValorMulta(entity.getValorMulta());
         dto.setValorAluguel(entity.getValorAluguel());
+        dto.setValorAluguelOriginal(entity.getValorAluguelOriginal());
         dto.setDataVencimento(entity.getDataVencimento());
         dto.setEmpresaNome(entity.getEmpresa().getNome());
         dto.setEmpresaId(entity.getEmpresa().getId());
@@ -33,7 +37,11 @@ public class PropriedadeMapper {
         entity.setId(dto.getId());
         entity.setNome(dto.getNome());
         entity.setEndereco(dto.getEndereco());
+        entity.setGmail(dto.getGmail());
+        entity.setValorJuros(dto.getValorJuros());
+        entity.setValorMulta(dto.getValorMulta());
         entity.setValorAluguel(dto.getValorAluguel());
+        entity.setValorAluguelOriginal(dto.getValorAluguelOriginal());
         entity.setDataVencimento(dto.getDataVencimento());
         EmpresaEntity empresa = new EmpresaEntity();
         empresa.setId(dto.getEmpresaId());

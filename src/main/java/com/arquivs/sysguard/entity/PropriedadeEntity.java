@@ -31,7 +31,18 @@ public class PropriedadeEntity {
 
     private String endereco;
 
+    @Column(unique = true)
+    private String gmail;
+
+    private BigDecimal valorJuros;
+
+    private BigDecimal valorMulta;
+
     private BigDecimal valorAluguel;
+
+    @Column(nullable = true)
+    private BigDecimal valorAluguelOriginal;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataVencimento;
@@ -39,6 +50,12 @@ public class PropriedadeEntity {
     @ManyToOne
     @JoinColumn(name = "empresa_id", nullable = false)
     private EmpresaEntity empresa;
-    
+
+    public void setValorAluguel(BigDecimal valorAluguel) {
+        this.valorAluguel = valorAluguel;
+        if (this.valorAluguelOriginal == null && valorAluguel != null){
+            this.valorAluguelOriginal = valorAluguel;
+        }
+    }
 
 }

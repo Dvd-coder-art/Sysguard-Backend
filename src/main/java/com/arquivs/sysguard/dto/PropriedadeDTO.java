@@ -14,7 +14,11 @@ public class PropriedadeDTO {
     private String id;
     private String nome;
     private String endereco;
+    private String gmail;
+    private BigDecimal valorJuros;
+    private BigDecimal valorMulta;
     private BigDecimal valorAluguel;
+    private BigDecimal valorAluguelOriginal;
     private LocalDate dataVencimento;
     private String empresaId;
     private String empresaNome;
