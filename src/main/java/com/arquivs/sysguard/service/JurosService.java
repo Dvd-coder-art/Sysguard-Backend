@@ -27,7 +27,7 @@ public class JurosService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void calcularJuros() {
         System.out.println("Executando o cálculo de juros e multas...");
         List<PropriedadeEntity> propriedades = propriedadeRepository.findAll();
