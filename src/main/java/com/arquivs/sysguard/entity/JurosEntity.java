@@ -18,11 +18,12 @@ public class JurosEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private BigDecimal valorMulta;
 
     private LocalDate dataCalculo;
 
     @ManyToOne
-    @JoinColumn(name = "propriedade_id")
+    @JoinColumn(name = "propriedade_id", nullable = false)
     private PropriedadeEntity propriedade;
 }

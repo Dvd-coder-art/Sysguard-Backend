@@ -41,7 +41,8 @@ public class PropriedadeMapper {
         entity.setValorJuros(dto.getValorJuros());
         entity.setValorMulta(dto.getValorMulta());
         entity.setValorAluguel(dto.getValorAluguel());
-        entity.setValorAluguelOriginal(dto.getValorAluguelOriginal());
+
+
         entity.setDataVencimento(dto.getDataVencimento());
         EmpresaEntity empresa = new EmpresaEntity();
         empresa.setId(dto.getEmpresaId());
