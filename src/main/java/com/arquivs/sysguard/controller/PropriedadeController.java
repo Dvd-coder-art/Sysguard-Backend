@@ -18,8 +18,10 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/propriedades")
+@RequestMapping("/api/propriedade")
 public class PropriedadeController {
+
+
 
     @Autowired
     private PropriedadeService propriedadeService;
@@ -30,8 +32,8 @@ public class PropriedadeController {
     @Autowired
     private EmpresaMapper empresaMapper;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<PropriedadeDTO>> cadastrar(@RequestBody PropriedadeDTO propriedadeDTO) {
+    @PostMapping("/empresa/{empresaId}")
+    public ResponseEntity<ApiResponse<PropriedadeDTO>> cadastrar(@PathVariable String empresaId, @RequestBody PropriedadeDTO propriedadeDTO) {
         String userId = getUserId();
 
         List<PropriedadeDTO> propriedades = propriedadeService.listarPropriedadesDoUsuario(userId);
@@ -76,9 +78,18 @@ public class PropriedadeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> atualizar(@PathVariable String id, @RequestBody PropriedadeDTO propriedadeAtualizada) {
+    @PatchMapping("/empresa/{empresaId}/{id}")
+    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> atualizar(@PathVariable String empresaId ,@PathVariable String id, @RequestBody PropriedadeDTO propriedadeAtualizada) {
         List<PropriedadeDTO> propriedades = propriedadeService.listarPropriedadesDoUsuario(getUserId());
+        Optional<EmpresaDTO> empresa = empresaService.obterEmpresaPorId(empresaId).map(empresaMapper::toDTO);
+
+        if(empresa.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                    "error",
+                    "Empresa não encontrada",
+                    null
+            ));
+        }
         Optional<PropriedadeDTO> propriedadeExistente = propriedades.stream()
                 .filter(propriedade -> propriedade.getId().equals(id))
                 .findFirst();
@@ -104,9 +115,19 @@ public class PropriedadeController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<PropriedadeDTO>>> listar(){
+    @GetMapping("/empresa/{empresaId}")
+    public ResponseEntity<ApiResponse<List<PropriedadeDTO>>> listar(@PathVariable String empresaId){
         String userId = getUserId();
+
+        Optional<EmpresaDTO> empresa = empresaService.obterEmpresaPorId(empresaId).map(empresaMapper::toDTO);
+
+        if(empresa.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                    "error",
+                    "Empresa não encontrada",
+                    null
+            ));
+        }
         List<PropriedadeDTO> propriedades = propriedadeService.listarPropriedadesDoUsuario(userId);
 
         ApiResponse<List<PropriedadeDTO>> response = new ApiResponse<>(
@@ -117,9 +138,19 @@ public class PropriedadeController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> buscarPorId(@PathVariable String id) {
+    @GetMapping("/empresa/{empresaId}/{id}")
+    public ResponseEntity<ApiResponse<Optional<PropriedadeDTO>>> buscarPorId(@PathVariable String empresaId,@PathVariable String id) {
         Optional<PropriedadeDTO> propriedade = propriedadeService.buscarPropriedadePorId(id);
+
+        Optional<EmpresaDTO> empresa = empresaService.obterEmpresaPorId(empresaId).map(empresaMapper::toDTO);
+
+        if(empresa.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                    "error",
+                    "Empresa não encontrada",
+                    null
+            ));
+        }
 
         if (propriedade.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
@@ -137,9 +168,19 @@ public class PropriedadeController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable String id) {
+    @DeleteMapping("/empresa/{empresaId}/{id}")
+    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable String empresaId,@PathVariable String id) {
         Optional<PropriedadeDTO> propriedades = propriedadeService.buscarPropriedadePorId(id);
+
+        Optional<EmpresaDTO> empresa = empresaService.obterEmpresaPorId(empresaId).map(empresaMapper::toDTO);
+
+        if(empresa.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(
+                    "error",
+                    "Empresa não encontrada",
+                    null
+            ));
+        }
 
        if(propriedades.isEmpty()){
            ApiResponse<Void> response = new ApiResponse<>(

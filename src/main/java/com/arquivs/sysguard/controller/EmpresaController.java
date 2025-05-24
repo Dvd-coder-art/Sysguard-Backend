@@ -25,9 +25,17 @@ public class EmpresaController {
     @Autowired
     private EmpresaMapper empresaMapper;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<EmpresaDTO>> criarEmpresa(@RequestBody EmpresaDTO dto) {
-        String userId = getUserId();
+    @PostMapping("/{userId}")
+    public ResponseEntity<ApiResponse<EmpresaDTO>> criarEmpresa(@PathVariable String userId, @RequestBody EmpresaDTO dto) {
+        userId = getUserId();
+        if (userId.isEmpty()){
+            ApiResponse<EmpresaDTO> response = new ApiResponse<>(
+                    "error",
+                    "Usuario não encontrado",
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
         try {
             EmpresaEntity entity = empresaMapper.toEntity(dto);
             EmpresaEntity empresaSalva = (EmpresaEntity) empresaService.salvarEmpresa(entity, userId);
@@ -48,9 +56,18 @@ public class EmpresaController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<EmpresaDTO>>> obterEmpresaDoUsuario() {
-        String userId = getUserId();
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse<List<EmpresaDTO>>> obterEmpresaDoUsuario(@PathVariable String userId) {
+
+        userId = getUserId();
+        if (userId.isEmpty()){
+            ApiResponse<List<EmpresaDTO>> response = new ApiResponse<>(
+                    "error",
+                    "Usuario não encontrado",
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
         List<EmpresaDTO> empresas = empresaService.obterEmpresaDoUsuario(userId)
                 .stream()
                 .map(empresaMapper::toDTO)
@@ -69,9 +86,19 @@ public class EmpresaController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<EmpresaDTO>> buscarPorId(@PathVariable String id){
+    @GetMapping("/{userId}/{id}")
+    public ResponseEntity<ApiResponse<EmpresaDTO>> buscarPorId(@PathVariable String userId,@PathVariable String id){
+        userId = getUserId();
+        if (userId.isEmpty()){
+            ApiResponse<EmpresaDTO> response = new ApiResponse<>(
+                    "error",
+                    "Usuario não encontrado",
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
         return empresaService.obterEmpresaPorId(id).map(empresa ->{
+
             EmpresaDTO empresaDTO = empresaMapper.toDTO(empresa);
             ApiResponse<EmpresaDTO> response = new ApiResponse<>(
                     "success",
@@ -82,8 +109,17 @@ public class EmpresaController {
         }).orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<ApiResponse<EmpresaDTO>> atualizar(@PathVariable String id, @RequestBody EmpresaDTO dto){
+    @PatchMapping("/{userId}/{id}")
+    public ResponseEntity<ApiResponse<EmpresaDTO>> atualizar(@PathVariable String userId, @PathVariable String id, @RequestBody EmpresaDTO dto){
+        userId = getUserId();
+        if (userId.isEmpty()){
+            ApiResponse<EmpresaDTO> response = new ApiResponse<>(
+                    "error",
+                    "Usuario não encontrado",
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
         Optional<EmpresaEntity> existente = empresaService.obterEmpresaPorId(id);
 
         if(existente.isEmpty()){
@@ -112,8 +148,17 @@ public class EmpresaController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable String id){
+    @DeleteMapping("/{userId}/{id}")
+    public ResponseEntity<ApiResponse<Void>> deletar(@PathVariable String userId,@PathVariable String id){
+        userId = getUserId();
+        if (userId.isEmpty()){
+            ApiResponse<Void> response = new ApiResponse<>(
+                    "error",
+                    "Usuario não encontrado",
+                    null
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
         try {
             empresaService.deletarEmpresa(id);
             ApiResponse<Void> response = new ApiResponse<>(
